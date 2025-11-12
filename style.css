@@ -5,7 +5,7 @@
     box-sizing: border-box;
 }
 
-html, body {
+html, body, .stApp {
     margin: 0 !important;
     padding: 0 !important;
     background: #0a0e27;
@@ -23,11 +23,6 @@ html, body {
 .main {
     padding: 0 !important;
     margin: 0 !important;
-}
-
-.stApp {
-    margin: 0 !important;
-    padding: 0 !important;
 }
 
 section.main > div {
@@ -64,7 +59,8 @@ section[data-testid="stFileUploadDropzone"]:hover {
 /* Hide Streamlit branding */
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
-header {visibility: hidden;}
+/* Use display: none; to ensure the header takes up no space */
+header {display: none;}
 
 /* Navbar */
 .navbar {
