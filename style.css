@@ -47,13 +47,12 @@ div[data-testid="stVerticalBlock"] {
     gap: 0 !important;
 }
 
-/* --- NEW CSS RULE TO STYLE THE CLASSIFICATION SECTION --- */
+/* --- NEW, SPECIFIC SELECTOR FOR THE CLASSIFICATION SECTION --- */
 /*
-  This is the key fix. It finds the container that has your section titles
-  and applies the background and padding directly to it. This removes the
-  unwanted vertical gaps.
+  This targets the columns that immediately follow our custom #classify-section-start anchor.
+  The padding-top here adds the space above the "Upload Your Food Image" title.
 */
-section.main div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"] {
+div#classify-section-start + div[data-testid="stHorizontalBlock"] {
     background: #0f172a;
     padding: 5rem 4rem;
 }
@@ -389,6 +388,8 @@ section[data-testid="stFileUploadDropzone"]:hover {
     padding: 5rem 4rem;
     width: 100%;
     margin: 0;
+    /* This margin creates the space between the classification section and this one */
+    margin-top: 2rem;
 }
 
 .about-container {
@@ -523,7 +524,7 @@ section[data-testid="stFileUploadDropzone"]:hover {
     }
     
     .about-section,
-    section.main div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"] {
+    div#classify-section-start + div[data-testid="stHorizontalBlock"] {
         padding: 3rem 1.5rem;
     }
 }
