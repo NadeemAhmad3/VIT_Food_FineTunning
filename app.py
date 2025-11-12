@@ -147,87 +147,81 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Classification Section
-# Wrap the section in a container to manage layout better
-with st.container():
-    # Use markdown to create the styled background and padding
-    st.markdown('<div class="section-container" id="classify">', unsafe_allow_html=True)
+# NO st.container() here. We directly create the section.
+st.markdown('<div class="section-container" id="classify">', unsafe_allow_html=True)
+
+col1, col2 = st.columns([1, 1], gap="large")
+
+with col1:
+    st.markdown('<h2 class="section-title">Upload Your Food Image</h2>', unsafe_allow_html=True)
     
-    col1, col2 = st.columns([1, 1], gap="large")
+    uploaded_file = st.file_uploader(
+        "Choose an image...",
+        type=['jpg', 'jpeg', 'png'],
+        label_visibility="collapsed"
+    )
+    
+    if uploaded_file:
+        image = Image.open( uploaded_file).convert('RGB')
+        st.markdown('<div class="image-preview">', unsafe_allow_html=True)
+        st.image(image, use_container_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    with col1:
-        st.markdown('<h2 class="section-title">Upload Your Food Image</h2>', unsafe_allow_html=True)
-        
-        uploaded_file = st.file_uploader(
-            "Choose an image...",
-            type=['jpg', 'jpeg', 'png'],
-            label_visibility="collapsed"
-        )
-        
-        if uploaded_file:
-            image = Image.open(uploaded_file).convert('RGB')
-            st.markdown('<div class="image-preview">', unsafe_allow_html=True)
-            st.image(image, use_container_width=True)
-            st.markdown('</div>', unsafe_allow_html=True)
-
-    with col2:
-        st.markdown('<h2 class="section-title">Classification Results</h2>', unsafe_allow_html=True)
-        
-        if uploaded_file:
-            with st.spinner('🔍 Analyzing your food...'):
-                # Load model
-                if st.session_state.model is None:
-                    st.session_state.model, st.session_state.id2label, st.session_state.device = load_model()
-                
-                # Get predictions
-                predictions = predict_food(
-                    image,
-                    st.session_state.model,
-                    st.session_state.id2label,
-                    st.session_state.device
-                )
+with col2:
+    st.markdown('<h2 class="section-title">Classification Results</h2>', unsafe_allow_html=True)
+    
+    if uploaded_file:
+        with st.spinner('🔍 Analyzing your food...'):
+            if st.session_state.model is None:
+                st.session_state.model, st.session_state.id2label, st.session_state.device = load_model()
             
-            # Display results
-            st.markdown('<div class="results-container">', unsafe_allow_html=True)
-            
-            for i, (food_name, confidence) in enumerate(predictions):
-                if i == 0:
-                    st.markdown(f"""
-                    <div class="prediction-card primary">
-                        <div class="prediction-header">
-                            <span class="prediction-rank">#{i+1}</span>
-                            <span class="prediction-name">{food_name}</span>
-                        </div>
-                        <div class="confidence-bar">
-                            <div class="confidence-fill" style="width: {confidence}%"></div>
-                        </div>
-                        <div class="prediction-confidence">{confidence:.1f}% confident</div>
+            predictions = predict_food(
+                image,
+                st.session_state.model,
+                st.session_state.id2label,
+                st.session_state.device
+            )
+        
+        st.markdown('<div class="results-container">', unsafe_allow_html=True)
+        
+        for i, (food_name, confidence) in enumerate(predictions):
+            if i == 0:
+                st.markdown(f"""
+                <div class="prediction-card primary">
+                    <div class="prediction-header">
+                        <span class="prediction-rank">#{i+1}</span>
+                        <span class="prediction-name">{food_name}</span>
                     </div>
-                    """, unsafe_allow_html=True)
-                else:
-                    st.markdown(f"""
-                    <div class="prediction-card">
-                        <div class="prediction-header">
-                            <span class="prediction-rank">#{i+1}</span>
-                            <span class="prediction-name">{food_name}</span>
-                        </div>
-                        <div class="confidence-bar secondary">
-                            <div class="confidence-fill" style="width: {confidence}%"></div>
-                        </div>
-                        <div class="prediction-confidence">{confidence:.1f}%</div>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: {confidence}%"></div>
                     </div>
-                    """, unsafe_allow_html=True)
-            
-            st.markdown('</div>', unsafe_allow_html=True)
-        else:
-            st.markdown("""
-            <div class="placeholder">
-                <div class="placeholder-icon">📸</div>
-                <p>Upload an image to see the magic happen!</p>
-            </div>
-            """, unsafe_allow_html=True)
+                    <div class="prediction-confidence">{confidence:.1f}% confident</div>
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown(f"""
+                <div class="prediction-card">
+                    <div class="prediction-header">
+                        <span class="prediction-rank">#{i+1}</span>
+                        <span class="prediction-name">{food_name}</span>
+                    </div>
+                    <div class="confidence-bar secondary">
+                        <div class="confidence-fill" style="width: {confidence}%"></div>
+                    </div>
+                    <div class="prediction-confidence">{confidence:.1f}%</div>
+                </div>
+                """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+    else:
+        st.markdown("""
+        <div class="placeholder">
+            <div class="placeholder-icon">📸</div>
+            <p>Upload an image to see the magic happen!</p>
+        </div>
+        """, unsafe_allow_html=True)
 
-    # Close the div for the section container
-    st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
 
 
 # About Section
