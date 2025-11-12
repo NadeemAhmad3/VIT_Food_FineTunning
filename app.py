@@ -147,6 +147,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Classification Section
+# This hidden div acts as an anchor for our CSS to target the correct container
+st.markdown('<div id="classify-section-start" style="display: none;"></div>', unsafe_allow_html=True)
 col1, col2 = st.columns([1, 1], gap="large")
 
 with col1:
