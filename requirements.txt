@@ -1,6 +1,7 @@
-streamlit==1.29.0
-torch==2.1.0
-torchvision==0.16.0
-transformers==4.35.0
-Pillow==10.1.0
-numpy==1.24.3
+streamlit>=1.38.0
+torch>=2.5.0
+torchvision>=0.21.0
+transformers>=4.35.0
+Pillow>=10.1.0
+numpy>=1.24.3
+accelerate>=0.24.0
