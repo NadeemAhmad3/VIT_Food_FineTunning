@@ -5,7 +5,7 @@
     box-sizing: border-box;
 }
 
-html, body, .stApp {
+html, body {
     margin: 0 !important;
     padding: 0 !important;
     background: #0a0e27;
@@ -13,22 +13,41 @@ html, body, .stApp {
     overflow-x: hidden;
 }
 
-/* Remove ALL Streamlit default spacing */
+/*
+  AGGRESSIVE OVERRIDE FOR STREAMLIT CONTAINERS
+  This is the key to removing the side and top spacing.
+*/
+div[data-testid="stAppViewContainer"] {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+div.block-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+}
+
 .main .block-container {
     padding: 0 !important;
     margin: 0 !important;
     max-width: 100% !important;
 }
 
-.main {
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
 section.main > div {
     padding: 0 !important;
     margin: 0 !important;
 }
+
+/* Hide Streamlit branding & header */
+header[data-testid="stHeader"] {
+    display: none !important;
+}
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+
+
+/* Your existing styles (unchanged from here) */
 
 div[data-testid="stVerticalBlock"] {
     gap: 0 !important;
@@ -55,12 +74,6 @@ section[data-testid="stFileUploadDropzone"]:hover {
     transform: translateY(-2px);
     background: rgba(59, 130, 246, 0.1);
 }
-
-/* Hide Streamlit branding */
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-/* Use display: none; to ensure the header takes up no space */
-header {display: none;}
 
 /* Navbar */
 .navbar {
