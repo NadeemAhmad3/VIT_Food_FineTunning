@@ -47,14 +47,14 @@ div[data-testid="stVerticalBlock"] {
     gap: 0 !important;
 }
 
-/* --- NEW, SPECIFIC SELECTOR FOR THE CLASSIFICATION SECTION --- */
+/* --- SELECTOR FOR THE CLASSIFICATION SECTION --- */
 /*
-  This targets the columns that immediately follow our custom #classify-section-start anchor.
-  The padding-top here adds the space above the "Upload Your Food Image" title.
+  This is the key fix: margin-top adds the space after the hero section.
 */
 div#classify-section-start + div[data-testid="stHorizontalBlock"] {
     background: #0f172a;
     padding: 5rem 4rem;
+    margin-top: 3rem;
 }
 
 
