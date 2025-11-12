@@ -13,10 +13,7 @@ html, body {
     overflow-x: hidden;
 }
 
-/*
-  AGGRESSIVE OVERRIDE FOR STREAMLIT CONTAINERS
-  This is the key to removing the side and top spacing.
-*/
+/* AGGRESSIVE OVERRIDE FOR STREAMLIT CONTAINERS */
 div[data-testid="stAppViewContainer"] {
     padding: 0 !important;
     margin: 0 !important;
@@ -46,12 +43,23 @@ header[data-testid="stHeader"] {
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
 
-
-/* Your existing styles (unchanged from here) */
-
 div[data-testid="stVerticalBlock"] {
     gap: 0 !important;
 }
+
+/* --- NEW CSS RULE TO STYLE THE CLASSIFICATION SECTION --- */
+/*
+  This is the key fix. It finds the container that has your section titles
+  and applies the background and padding directly to it. This removes the
+  unwanted vertical gaps.
+*/
+section.main div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"] {
+    background: #0f172a;
+    padding: 5rem 4rem;
+}
+
+
+/* Your existing styles (mostly unchanged) */
 
 div[data-testid="stHorizontalBlock"] {
     gap: 2rem !important;
@@ -236,14 +244,7 @@ section[data-testid="stFileUploadDropzone"]:hover {
     background: rgba(255, 255, 255, 0.2);
 }
 
-/* Classification Section */
-.section-container {
-    max-width: 100%;
-    margin: 0;
-    padding: 5rem 4rem;
-    background: #0f172a;
-}
-
+/* Classification Section Title*/
 .section-title {
     font-size: 2.5rem;
     font-weight: 800;
@@ -521,8 +522,8 @@ section[data-testid="stFileUploadDropzone"]:hover {
         grid-template-columns: 1fr;
     }
     
-    .section-container,
-    .about-section {
+    .about-section,
+    section.main div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"] {
         padding: 3rem 1.5rem;
     }
 }
