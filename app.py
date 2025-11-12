@@ -147,9 +147,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Classification Section
-# NO st.container() here. We directly create the section.
-st.markdown('<div class="section-container" id="classify">', unsafe_allow_html=True)
-
 col1, col2 = st.columns([1, 1], gap="large")
 
 with col1:
@@ -220,9 +217,6 @@ with col2:
             <p>Upload an image to see the magic happen!</p>
         </div>
         """, unsafe_allow_html=True)
-
-st.markdown('</div>', unsafe_allow_html=True)
-
 
 # About Section
 st.markdown("""
