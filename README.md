@@ -396,8 +396,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👥 Authors
 
 **Nadeem Ahmad** - *Lead Developer*
-- GitHub: [@NadeemAhmad003](https://github.com/NadeemAhmad003)
-- LinkedIn: [Nadeem Ahmad]((https://www.linkedin.com/in/nadeem-ahmad3/))
+- GitHub: [@NadeemAhmad003](https://github.com/NadeemAhmad3)
+- LinkedIn: [Nadeem Ahmad](https://www.linkedin.com/in/nadeem-ahmad3/)
 - Kaggle: [@nadeemahmad003](https://www.kaggle.com/nadeemahmad003)
 
 **Bisam** - *Co-Developer*
