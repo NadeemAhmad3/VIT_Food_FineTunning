@@ -8,7 +8,7 @@
 
 A state-of-the-art food classification system powered by Vision Transformer (ViT) that can identify **101 different food categories** with **83.45% accuracy**. Built with PyTorch and deployed as an interactive Streamlit web application.
 
-![FoodVision AI Demo](https://via.placeholder.com/800x400?text=FoodVision+AI+Demo)
+![FoodVision AI Demo](<img width="1910" height="975" alt="image" src="https://github.com/user-attachments/assets/4f409ead-d442-4357-b087-455885a2c6a4" />)
 
 ## 📋 Table of Contents
 
