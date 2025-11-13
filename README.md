@@ -53,13 +53,13 @@ FoodVision AI leverages Google's Vision Transformer (ViT) architecture, fine-tun
 ## 🚀 Demo
 
 ### Live Demo
-🌐 **Try it here:** [FoodVision AI Demo](your-streamlit-app-url)
+🌐 **Try it here:** [FoodVision AI Demo](https://tasteiq.streamlit.app/)
 
 ### Quick Demo
 ```bash
 # Clone and run locally
-git clone https://github.com/NadeemAhmad003/foodvision-ai.git
-cd foodvision-ai
+git clone https://github.com/NadeemAhmad003/VIT_Food_FineTunning.git
+cd VIT_Food_FineTunning
 pip install -r requirements.txt
 streamlit run app.py
 ```
@@ -148,8 +148,8 @@ Image Properties:
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/NadeemAhmad003/foodvision-ai.git
-cd foodvision-ai
+git clone https://github.com/NadeemAhmad003/VIT_Food_FineTunning.git
+cd VIT_Food_FineTunning
 ```
 
 ### Step 2: Create Virtual Environment (Recommended)
@@ -329,7 +329,7 @@ Final Test: 83.45%
 ## 📁 Project Structure
 
 ```
-foodvision-ai/
+VIT_Food_FineTunning/
 │
 ├── app.py                          # Streamlit web application
 ├── VIT_finetunning.ipynb           # Training notebook
@@ -337,18 +337,7 @@ foodvision-ai/
 ├── style.css                       # Custom CSS for web app
 ├── LICENSE                         # MIT License
 ├── README.md                       # This file
-│
-├── downloaded_model/               # Model files (auto-downloaded)
-│   ├── best_vit_food_model.pth    # Trained model weights
-│   └── label_mappings.json         # Class ID to label mappings
-│
-├── checkpoints/                    # Training checkpoints (local only)
-│   ├── checkpoint_epoch_1.pth
-│   ├── checkpoint_epoch_2.pth
-│   └── checkpoint_epoch_3.pth
-│
-└── assets/                         # Images and demo files (optional)
-    └── demo_images/
+
 ```
 
 ## 🔧 Technologies Used
@@ -408,11 +397,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Nadeem Ahmad** - *Lead Developer*
 - GitHub: [@NadeemAhmad003](https://github.com/NadeemAhmad003)
-- LinkedIn: [Nadeem Ahmad](your-linkedin-url)
+- LinkedIn: [Nadeem Ahmad]((https://www.linkedin.com/in/nadeem-ahmad3/))
 - Kaggle: [@nadeemahmad003](https://www.kaggle.com/nadeemahmad003)
 
 **Bisam** - *Co-Developer*
 - Contributions: Model optimization, data preprocessing
+- LinkedIn: [Bisam Ahmad](https://www.linkedin.com/in/bisam-ahmad-1bb581242/))
 
 ## 🙏 Acknowledgments
 
@@ -436,8 +426,8 @@ I provide professional fine-tuning services for computer vision tasks:
 
 **Interested in custom ML solutions?** Feel free to reach out!
 
-📧 Email: your.email@example.com  
-💼 LinkedIn: [Connect with me](your-linkedin-url)
+📧 Email: nadeemahmad2703@gmail.com  
+💼 LinkedIn: [Connect with me](https://www.linkedin.com/in/nadeem-ahmad3/)
 
 ## 📊 Project Stats
 
