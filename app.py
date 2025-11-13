@@ -5,6 +5,56 @@ from transformers import ViTForImageClassification
 from PIL import Image
 import json
 import os
+import zipfile
+from pathlib import Path
+
+# --- KAGGLE DATASET SETUP ---
+# IMPORTANT: Replace with your Kaggle username and dataset name.
+KAGGLE_DATASET_ID = "your-username/your-dataset-name" 
+
+# Define paths for model and labels
+# Using Path for better cross-platform compatibility
+MODEL_DIR = Path("downloaded_model")
+MODEL_PATH = MODEL_DIR / "best_vit_food_model.pth"
+LABELS_PATH = MODEL_DIR / "label_mappings.json"
+
+# --- Function to Download and Unzip Kaggle Dataset ---
+@st.cache_resource
+def download_and_setup_model():
+    """
+    Downloads and unzips the model files from Kaggle if they don't exist.
+    This function runs only once per session thanks to st.cache_resource.
+    """
+    # Check if running in Streamlit Cloud
+    if 'KAGGLE_USERNAME' in st.secrets and 'KAGGLE_KEY' in st.secrets:
+        # Check if model is already downloaded
+        if not MODEL_PATH.exists() or not LABELS_PATH.exists():
+            st.info("Downloading model files from Kaggle... This may take a moment.")
+            
+            # Setup Kaggle API credentials
+            os.environ['KAGGLE_USERNAME'] = st.secrets['KAGGLE_USERNAME']
+            os.environ['KAGGLE_KEY'] = st.secrets['KAGGLE_KEY']
+            
+            from kaggle.api.kaggle_api_extended import KaggleApi
+            api = KaggleApi()
+            api.authenticate()
+            
+            # Create directory to download files
+            MODEL_DIR.mkdir(exist_ok=True)
+            
+            # Download the dataset
+            api.dataset_download_files(KAGGLE_DATASET_ID, path=MODEL_DIR, unzip=True)
+            st.success("Model files downloaded successfully!")
+    # For local development, files are expected to be in the MODEL_DIR folder
+    else:
+        if not MODEL_PATH.exists() or not LABELS_PATH.exists():
+            st.warning(
+                "Running locally. Please place your model and label files in a 'downloaded_model' directory."
+            )
+            return False
+    return True
+
+# --- EXISTING STREAMLIT APP CODE (with modifications) ---
 
 # Page config
 st.set_page_config(
@@ -15,8 +65,10 @@ st.set_page_config(
 )
 
 # Load custom CSS
-with open('style.css') as f:
-    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+# Make sure you have a 'style.css' file in your repository
+if os.path.exists('style.css'):
+    with open('style.css') as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 # Initialize session state
 if 'model' not in st.session_state:
@@ -24,21 +76,19 @@ if 'model' not in st.session_state:
     st.session_state.id2label = None
     st.session_state.device = None
 
+# Run the download and setup process at the start
+model_ready = download_and_setup_model()
+
 @st.cache_resource
 def load_model():
-    """Load the trained ViT model"""
+    """Load the trained ViT model from the downloaded path."""
+    if not model_ready:
+        st.error("Model files are not available. Cannot load the model.")
+        return None, None, None
+        
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     
-    # Update this path to your Kaggle dataset path
-    MODEL_PATH = '/kaggle/input/your-dataset-name/best_vit_food_model.pth'
-    LABELS_PATH = '/kaggle/input/your-dataset-name/label_mappings.json'
-    
-    # For local testing, use relative paths
-    if not os.path.exists(MODEL_PATH):
-        MODEL_PATH = 'best_vit_food_model.pth'
-        LABELS_PATH = 'label_mappings.json'
-    
-    # Load label mappings
+    # Load label mappings from the defined path
     with open(LABELS_PATH, 'r') as f:
         label_data = json.load(f)
         id2label = {int(k): v for k, v in label_data['id2label'].items()}
@@ -53,7 +103,7 @@ def load_model():
         ignore_mismatched_sizes=True
     )
     
-    # Load trained weights
+    # Load trained weights from the defined path
     checkpoint = torch.load(MODEL_PATH, map_location=device)
     model.load_state_dict(checkpoint['model_state_dict'])
     model.to(device)
@@ -170,48 +220,55 @@ with col2:
     st.markdown('<h2 class="section-title">Classification Results</h2>', unsafe_allow_html=True)
     
     if uploaded_file:
-        with st.spinner('🔍 Analyzing your food...'):
-            if st.session_state.model is None:
-                st.session_state.model, st.session_state.id2label, st.session_state.device = load_model()
+        if model_ready:
+            with st.spinner('🔍 Analyzing your food...'):
+                if st.session_state.model is None:
+                    st.session_state.model, st.session_state.id2label, st.session_state.device = load_model()
+                
+                # Check if model was loaded successfully
+                if st.session_state.model:
+                    predictions = predict_food(
+                        image,
+                        st.session_state.model,
+                        st.session_state.id2label,
+                        st.session_state.device
+                    )
             
-            predictions = predict_food(
-                image,
-                st.session_state.model,
-                st.session_state.id2label,
-                st.session_state.device
-            )
-        
-        st.markdown('<div class="results-container">', unsafe_allow_html=True)
-        
-        for i, (food_name, confidence) in enumerate(predictions):
-            if i == 0:
-                st.markdown(f"""
-                <div class="prediction-card primary">
-                    <div class="prediction-header">
-                        <span class="prediction-rank">#{i+1}</span>
-                        <span class="prediction-name">{food_name}</span>
-                    </div>
-                    <div class="confidence-bar">
-                        <div class="confidence-fill" style="width: {confidence}%"></div>
-                    </div>
-                    <div class="prediction-confidence">{confidence:.1f}% confident</div>
-                </div>
-                """, unsafe_allow_html=True)
-            else:
-                st.markdown(f"""
-                <div class="prediction-card">
-                    <div class="prediction-header">
-                        <span class="prediction-rank">#{i+1}</span>
-                        <span class="prediction-name">{food_name}</span>
-                    </div>
-                    <div class="confidence-bar secondary">
-                        <div class="confidence-fill" style="width: {confidence}%"></div>
-                    </div>
-                    <div class="prediction-confidence">{confidence:.1f}%</div>
-                </div>
-                """, unsafe_allow_html=True)
-        
-        st.markdown('</div>', unsafe_allow_html=True)
+                    st.markdown('<div class="results-container">', unsafe_allow_html=True)
+                    
+                    for i, (food_name, confidence) in enumerate(predictions):
+                        if i == 0:
+                            st.markdown(f"""
+                            <div class="prediction-card primary">
+                                <div class="prediction-header">
+                                    <span class="prediction-rank">#{i+1}</span>
+                                    <span class="prediction-name">{food_name}</span>
+                                </div>
+                                <div class="confidence-bar">
+                                    <div class="confidence-fill" style="width: {confidence}%"></div>
+                                </div>
+                                <div class="prediction-confidence">{confidence:.1f}% confident</div>
+                            </div>
+                            """, unsafe_allow_html=True)
+                        else:
+                            st.markdown(f"""
+                            <div class="prediction-card">
+                                <div class="prediction-header">
+                                    <span class="prediction-rank">#{i+1}</span>
+                                    <span class="prediction-name">{food_name}</span>
+                                </div>
+                                <div class="confidence-bar secondary">
+                                    <div class="confidence-fill" style="width: {confidence}%"></div>
+                                </div>
+                                <div class="prediction-confidence">{confidence:.1f}%</div>
+                            </div>
+                            """, unsafe_allow_html=True)
+                    
+                    st.markdown('</div>', unsafe_allow_html=True)
+                else:
+                    st.error("Model could not be loaded. Please check the logs.")
+        else:
+            st.error("Model files are not available. The application cannot proceed.")
     else:
         st.markdown("""
         <div class="placeholder">
