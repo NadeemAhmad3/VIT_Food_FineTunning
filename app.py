@@ -10,7 +10,7 @@ from pathlib import Path
 
 # --- KAGGLE DATASET SETUP ---
 # IMPORTANT: Replace with your Kaggle username and dataset name.
-KAGGLE_DATASET_ID = "your-username/your-dataset-name" 
+KAGGLE_DATASET_ID = "nadeemahmad003/vit-fintunning-food-classification" 
 
 # Define paths for model and labels
 # Using Path for better cross-platform compatibility
